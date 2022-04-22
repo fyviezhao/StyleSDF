@@ -1,7 +1,5 @@
-import argparse
-import math
-import random
 import os
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 import yaml
 import numpy as np
 import torch
@@ -221,7 +219,7 @@ def train(opt, experiment_opt, loader, generator, discriminator, g_optim, d_opti
                             os.path.join(opt.checkpoints_dir, experiment_opt.expname, 'volume_renderer', f"samples/{str(i).zfill(7)}.png"),
                             nrow=int(opt.val_n_sample),
                             normalize=True,
-                            value_range=(-1, 1),)
+                            range=(-1, 1),)
 
             if wandb and opt.wandb:
                 wandb_log_dict = {"Generator": g_loss_val,
@@ -239,7 +237,7 @@ def train(opt, experiment_opt, loader, generator, discriminator, g_optim, d_opti
 
                 if i % 1000 == 0:
                     wandb_grid = utils.make_grid(samples, nrow=int(opt.val_n_sample),
-                                                   normalize=True, value_range=(-1, 1))
+                                                   normalize=True, range=(-1, 1))
                     wandb_ndarr = (255 * wandb_grid.permute(1, 2, 0).numpy()).astype(np.uint8)
                     wandb_images = Image.fromarray(wandb_ndarr)
                     wandb_log_dict.update({"examples": [wandb.Image(wandb_images,
@@ -366,8 +364,8 @@ if __name__ == "__main__":
         [transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True)])
 
-    dataset = MultiResolutionDataset(opt.dataset.dataset_path, transform, opt.model.size,
-                                     opt.model.renderer_spatial_output_dim)
+    dataset = MultiResolutionDataset(opt.dataset.dataset_path, opt.dataset.dataset_type, 
+                                     transform, opt.model.renderer_spatial_output_dim)
     loader = data.DataLoader(
         dataset,
         batch_size=opt.training.batch,

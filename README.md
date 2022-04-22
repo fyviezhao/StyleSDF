@@ -54,26 +54,24 @@ and geometric quality.
 ## Pre-Requisits
 You must have a **GPU with CUDA support** in order to run the code.
 
-This code requires **PyTorch**, **PyTorch3D** and **torchvision** to be installed, please go to [PyTorch.org](https://pytorch.org/) and [PyTorch3d.org](https://pytorch3d.org/) for installation info.<br>
-We tested our code on Python 3.8.5, PyTorch 1.9.0, PyTorch3D 0.6.1 and torchvision 0.10.0.
+1. Install pytorch and pytorch3d
+```sh
+$ conda create -n stylesdf python=3.7
+$ conda activate stylesdf
+$ conda install pillow=6.2.1 # https://github.com/python-pillow/Pillow/issues/4130
+$ conda install -c pytorch pytorch=1.7.1 torchvision $ cudatoolkit=10.2
+$ conda install -c fvcore -c iopath -c conda-forge fvcore iopath
+$ conda install -c bottler nvidiacub
+$ git clone https://github.com/facebookresearch/pytorch3d.git
+$ cd pytorch3d && pip install -e .
+```
 
-The following packages should also be installed:
-1. lmdb
-2. numpy
-3. ninja
-4. pillow
-5. requests
-6. tqdm
-7. scipy
-8. skimage
-9. skvideo
-10. trimesh[easy]
-11. configargparse
-12. munch
-13. wandb (optional)
-
-If any of these packages are not installed on your computer, you can install them using the supplied `requirements.txt` file:<br>
-```pip install -r requirements.txt```
+2. Install other packages
+```sh
+$ conda install scikit-image configargparse
+$ conda install -c conda-forge trimesh munch ffmpeg sk-video python-lmdb
+$ pip install wandb # optional
+```
 
 ## Download Pre-trained Models
 The pre-trained models can be downloaded by running `python download_models.py`.
@@ -116,6 +114,10 @@ This script will generate RGB video as well as depth map video for each identity
 ```
 
 ## Training (training files will be released soon...)
+
+### Download FFHQ and AFHQ Dataset
+1. The FFHQ dataset can be downloaded from this [page](https://github.com/NVlabs/ffhq-dataset).
+2. The AFHQ dataset can be downloaded via this [link](https://www.dropbox.com/s/t9l9o3vsx2jai3z/afhq.zip?dl=0) or this [link](https://www.dropbox.com/s/scckftx13grwmiv/afhq_v2.zip?dl=0) (AFHQ-v2).
 ### Preparing your Dataset
 If you wish to train a model from scratch, first you need to convert your dataset to an lmdb format. Run:<br>
 `python prepare_data.py --out_path OUTPUT_LMDB_PATH --n_worker N_WORKER --size SIZE1,SIZE2,SIZE3,... INPUT_DATASET_PATH`

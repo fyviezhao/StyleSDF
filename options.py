@@ -10,8 +10,8 @@ class BaseOptions():
     def initialize(self):
         # Dataset options
         dataset = self.parser.add_argument_group('dataset')
-        dataset.add_argument("--dataset_path", type=str, default='./datasets/FFHQ', help="path to the lmdb dataset")
-
+        dataset.add_argument("--dataset_path", type=str, default='./datasets/afhq', help="path to the dataset")
+        dataset.add_argument("--dataset_type", type=str, default='jpg', help="data type (jpg, png)")
         # Experiment Options
         experiment = self.parser.add_argument_group('experiment')
         experiment.add_argument('--config', is_config_file=True, help='config file path')

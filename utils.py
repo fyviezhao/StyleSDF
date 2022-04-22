@@ -113,11 +113,11 @@ def generate_camera_params(resolution, device, batch=1, locations=None, sweep=Fa
     viewpoint = torch.cat([azim, elev], 1)
 
     #### Generate camera extrinsic matrix ##########
-
+    # elev >0: rotation counter-clockwise within x-y plane; azim > 0: rotation counter-clockwise within x-z plane
     # convert angles to xyz coordinates
-    x = torch.cos(elev) * torch.sin(azim)
-    y = torch.sin(elev)
-    z = torch.cos(elev) * torch.cos(azim)
+    x = torch.cos(elev) * torch.sin(azim) # point left to right
+    y = torch.sin(elev) # point up
+    z = torch.cos(elev) * torch.cos(azim) # point outward from screen
     camera_dir = torch.stack([x, y, z], dim=1).view(-1,3)
     camera_loc = dist * camera_dir
 

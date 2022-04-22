@@ -88,14 +88,14 @@ def generate(opt, g_ema, surface_g_ema, device, mean_latent, surface_mean_latent
                 nrow=num_viewdirs,
                 normalize=True,
                 padding=0,
-                value_range=(-1, 1),)
+                range=(-1, 1),)
 
             utils.save_image(rgb_images_thumbs,
                 os.path.join(opt.results_dst_dir, 'images','{}_thumb.png'.format(str(i).zfill(7))),
                 nrow=num_viewdirs,
                 normalize=True,
                 padding=0,
-                value_range=(-1, 1),)
+                range=(-1, 1),)
 
             # this is done to fit to RTX2080 RAM size (11GB)
             del out
