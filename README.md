@@ -59,7 +59,7 @@ You must have a **GPU with CUDA support** in order to run the code.
 $ conda create -n stylesdf python=3.7
 $ conda activate stylesdf
 $ conda install pillow=6.2.1 # https://github.com/python-pillow/Pillow/issues/4130
-$ conda install -c pytorch pytorch=1.7.1 torchvision $ cudatoolkit=10.2
+$ conda install -c pytorch pytorch=1.7.1 torchvision cudatoolkit=10.2
 $ conda install -c fvcore -c iopath -c conda-forge fvcore iopath
 $ conda install -c bottler nvidiacub
 $ git clone https://github.com/facebookresearch/pytorch3d.git
@@ -118,9 +118,7 @@ This script will generate RGB video as well as depth map video for each identity
 ### Download FFHQ and AFHQ Dataset
 1. The FFHQ dataset can be downloaded from this [page](https://github.com/NVlabs/ffhq-dataset).
 2. The AFHQ dataset can be downloaded via this [link](https://www.dropbox.com/s/t9l9o3vsx2jai3z/afhq.zip?dl=0) or this [link](https://www.dropbox.com/s/scckftx13grwmiv/afhq_v2.zip?dl=0) (AFHQ-v2).
-### Preparing your Dataset
-If you wish to train a model from scratch, first you need to convert your dataset to an lmdb format. Run:<br>
-`python prepare_data.py --out_path OUTPUT_LMDB_PATH --n_worker N_WORKER --size SIZE1,SIZE2,SIZE3,... INPUT_DATASET_PATH`
+3. Unzip them under the `datasets` directory. Specifically, put all afhq (ffhq) images under `datasets/afhq` (`datasets/ffhq`).
 
 ### Training the volume renderer
 #### Training scripts

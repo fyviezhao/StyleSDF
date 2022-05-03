@@ -1,1 +1,1 @@
-python -m torch.distributed.launch --nproc_per_node 4 train_volume_renderer.py --batch 12 --chunk 6 --expname afhq_sdf_vol_renderer --dataset_path ./datasets/afhq  --dataset_type jpg --azim 0.15 --wandb
+python -m torch.distributed.launch --nproc_per_node 2 train_volume_renderer.py --batch 4 --chunk 4 --expname afhq_sdf_vol_renderer --dataset_path ./datasets/afhq  --dataset_type jpg --azim 0.15 --wandb

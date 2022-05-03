@@ -2,6 +2,7 @@ import argparse
 import math
 import random
 import os
+os.environ["CUDA_VISIBLE_DEVICES"]="4,5"
 import yaml
 import numpy as np
 import torch
@@ -23,7 +24,6 @@ try:
     import wandb
 except ImportError:
     wandb = None
-
 
 def train(opt, experiment_opt, loader, generator, discriminator, g_optim, d_optim, g_ema, device):
     loader = sample_data(loader)
@@ -209,13 +209,13 @@ def train(opt, experiment_opt, loader, generator, discriminator, g_optim, d_opti
                             os.path.join(opt.checkpoints_dir, experiment_opt.expname, 'full_pipeline', f"samples/{str(i).zfill(7)}.png"),
                             nrow=int(opt.val_n_sample),
                             normalize=True,
-                            value_range=(-1, 1),)
+                            range=(-1, 1),)
 
                         utils.save_image(thumbs_samples,
                             os.path.join(opt.checkpoints_dir, experiment_opt.expname, 'full_pipeline', f"samples/{str(i).zfill(7)}_thumbs.png"),
                             nrow=int(opt.val_n_sample),
                             normalize=True,
-                            value_range=(-1, 1),)
+                            range=(-1, 1),)
 
             if wandb and opt.wandb:
                 wandb_log_dict = {"Generator": g_loss_val,
@@ -229,14 +229,14 @@ def train(opt, experiment_opt, loader, generator, discriminator, g_optim, d_opti
                                   }
                 if i % 5000 == 0:
                     wandb_grid = utils.make_grid(samples, nrow=int(opt.val_n_sample),
-                                                   normalize=True, value_range=(-1, 1))
+                                                   normalize=True, range=(-1, 1))
                     wandb_ndarr = (255 * wandb_grid.permute(1, 2, 0).numpy()).astype(np.uint8)
                     wandb_images = Image.fromarray(wandb_ndarr)
                     wandb_log_dict.update({"examples": [wandb.Image(wandb_images,
                                             caption="Generated samples for azimuth angles of: -0.35, -0.25, -0.15, -0.05, 0.05, 0.15, 0.25, 0.35 Radians.")]})
 
                     wandb_thumbs_grid = utils.make_grid(thumbs_samples, nrow=int(opt.val_n_sample),
-                                                        normalize=True, value_range=(-1, 1))
+                                                        normalize=True, range=(-1, 1))
                     wandb_thumbs_ndarr = (255 * wandb_thumbs_grid.permute(1, 2, 0).numpy()).astype(np.uint8)
                     wandb_thumbs = Image.fromarray(wandb_thumbs_ndarr)
                     wandb_log_dict.update({"thumb_examples": [wandb.Image(wandb_thumbs,
@@ -385,8 +385,8 @@ if __name__ == "__main__":
         [transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=True)])
 
-    dataset = MultiResolutionDataset(opt.dataset.dataset_path, transform, opt.model.size,
-                                     opt.model.renderer_spatial_output_dim)
+    dataset = MultiResolutionDataset(opt.dataset.dataset_path, opt.dataset.dataset_type,
+                                     transform, opt.model.renderer_spatial_output_dim)
     loader = data.DataLoader(
         dataset,
         batch_size=opt.training.batch,
@@ -396,7 +396,7 @@ if __name__ == "__main__":
 
     if get_rank() == 0 and wandb is not None and opt.training.wandb:
         wandb.init(project="StyleSDF")
-        wandb.run.name = opt.experiment.expname
+        wandb.run.name = opt.experiment.expname.replace('vol_renderer', 'full_pipeline')
         wandb.config.dataset = os.path.basename(opt.dataset.dataset_path)
         wandb.config.update(opt.training)
         wandb.config.update(opt.model)
