@@ -70,7 +70,7 @@ $ cd pytorch3d && pip install -e .
 ```sh
 $ conda install scikit-image configargparse
 $ conda install -c conda-forge trimesh munch ffmpeg sk-video python-lmdb
-$ pip install wandb # optional
+$ pip install joblib opencv-python wandb # wandb is optional
 ```
 
 ## Download Pre-trained Models
