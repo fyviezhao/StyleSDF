@@ -63,7 +63,7 @@ $ conda install -c pytorch pytorch=1.7.1 torchvision cudatoolkit=10.2
 $ conda install -c fvcore -c iopath -c conda-forge fvcore iopath
 $ conda install -c bottler nvidiacub
 $ git clone https://github.com/facebookresearch/pytorch3d.git
-$ cd pytorch3d && pip install -e .
+$ cd pytorch3d && git checkout v0.6 && pip install -e .
 ```
 
 2. Install other packages
